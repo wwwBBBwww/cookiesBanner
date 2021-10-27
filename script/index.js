@@ -1,8 +1,8 @@
 const modal = document.querySelector(".jetbrains-cookies-banner");
 const bannerInput = document.querySelector(".jetbrains-cookies-banner__input");
-const cursor = modal.querySelector(".jetbrains-cookies-banner__cursor");
+const text = modal.querySelector(".jetbrains-cookies-banner__text");
+const cursor = document.querySelector(".jetbrains-cookies-banner__cursor");
 const command = modal.querySelector(".jetbrains-cookies-banner__command");
-
 
 const modalOptions = function () {
 const options = {
@@ -15,7 +15,7 @@ const options = {
     },
     clearValue(){    
       bannerInput.value = "";
-      cursor.textContent = "";
+      text.textContent = "";
     },
     setCookie(){
     let date = new Date(Date.now() + 86400e3);
@@ -37,12 +37,10 @@ const listener = (e) => {
   if (e.target.className !== "jetbrains-cookies-banner__btn"){ bannerInput.focus(); cursor.dataset.cursor = "true";}
 };
 modal.addEventListener("click", listener);
-bannerInput.addEventListener("blur", () => {
-  cursor.dataset.cursor = "false";
-});
+bannerInput.addEventListener("blur", () => { cursor.dataset.cursor = "false";});
 
 
-const listenerInput = () => {cursor.textContent = bannerInput.value;};
+const listenerInput = () => {text.textContent = bannerInput.value;};
 bannerInput.addEventListener("input", listenerInput);
 
 const btnYes = (event)=> {
@@ -77,11 +75,17 @@ const formCommand = function (value) {
     for (let item of commandMessage) {  item.remove();  }
         $modalOptions.clearValue();
         modal.dataset.scroll = false;
-  }
-  else if (/^$/.test(value)) {return }
-  else {
+      }
+      else if (/^$/.test(value)) {return }
+      else if (/^[hH][eE][lL][pP]$/.test(value)) {
+      createDomFragmentHelp();
+          modal.dataset.scroll = true;
+          modal.scrollTop += 144;
+          $modalOptions.clearValue();
+      }
+      else {
+        createDomFragment();
     modal.dataset.scroll = true;
-    createDomFragment();
     modal.scrollTop += 64;
     $modalOptions.clearValue();
   }
@@ -107,10 +111,18 @@ function createDomFragment() {
 
   const node = command.cloneNode(true);
   node.dataset.node = false;
+  node.querySelector(".jetbrains-cookies-banner__cursor").dataset.cursor='false';
 
   fragmentNode.append(node);
   fragmentNode.append(elmDiv);
   command.before(fragmentNode);
+}
+
+function createDomFragmentHelp() {
+  command.insertAdjacentHTML(
+    "beforebegin",
+    '<div class="jetbrains-cookies-banner__help" data-node="false">Type `y` or `yes` if you agree that JetBrains may use cookies and IP address to collect individual statistics and to provide you with personalized offers.<br><br>Type `n` or `no` if you don’t want JetBrains to collect individual statistics and to provide you with personalized offers.<br><br>Use `clear` to reset the terminal.</div>'
+  );
 }
 
 
@@ -144,5 +156,3 @@ const redactionTxtButtonYesNo = (params) => {
   
   
   
-
-
