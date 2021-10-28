@@ -91,14 +91,13 @@ const formCommand = function (value) {
   }
 };
 
-  // (function() {
-  //   let a = $modalOptions.getCookie("window");
-  //   if (a == "close") { $modalOptions.close(); }
-  //   else{setTimeout($modalOptions.open, 1000);}
-  // }
-  // ())
+  (function() {
+    let a = $modalOptions.getCookie("window");
+    if (a == "close") { $modalOptions.close(); }
+    else{setTimeout($modalOptions.open, 1000);}
+  }
+  ())
   
-  setTimeout($modalOptions.open, 1000)
 
 
 
